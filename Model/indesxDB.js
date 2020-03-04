@@ -14,4 +14,9 @@ let get_data = () => {
 let data = () => {
     return knex.select("*").from("Admin_tbl")
 }
-module.exports = {postdata,insert_data,get_data,data}
+
+let updata = (id,data) => {
+    return knex("Admin_tbl").update(data).where('id',id)
+}
+
+module.exports = {postdata,insert_data,get_data,data,updata}

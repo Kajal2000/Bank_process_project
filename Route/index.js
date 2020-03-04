@@ -50,8 +50,26 @@ app.get("/customerApi",(req,res)=>{
     .then((res_data)=>{
         for(var i = 0; i<res_data.length; i++){
         var s_data = res_data[i]["customer"]
-        console.log(s_data)
+        // console.log(s_data)
         }
     })
 })
+
+app.put('/putApi/:id',(req,res)=>{
+    var id = req.params.id
+    var data = {
+        customer : req.body.customer,
+        agent : req.body.agent,
+        agentApprove : req.body.agentApprove,
+        admin : req.body.admin,
+        adminApprove : req.body.adminApprove
+    }
+    appdb.updata(id,data)
+    .then((res_data)=>{
+        res.send({res_data})
+    }).catch((err)=>{
+        console.log(err)
+    })
+});
+
 module.exports = app;

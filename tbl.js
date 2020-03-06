@@ -26,4 +26,15 @@ knex_data.schema.createTable('Admin_tbl', (table) => {
         console.log(err)
     })
     
-    
+// 3rd table
+
+knex_data.schema.createTable('Approval_tbl', (table) => {
+    table.increments("user_id")
+    table.string("New_user");
+    table.string("Approved");
+    table.string("Rejected")
+    }).then(()=>{
+        console.log("tbl created")
+    }).catch((err)=>{
+        console.log(err)
+    })

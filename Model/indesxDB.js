@@ -19,4 +19,11 @@ let updata = (id,data) => {
     return knex("Admin_tbl").update(data).where('id',id)
 }
 
-module.exports = {postdata,insert_data,get_data,data,updata}
+let all_data_get = (id) => {
+    return knex.select("*").from("Admin_tbl").where('id',id)
+}
+let post_user = (id,data) => {
+    return knex("Approval_tbl").insert(data).where('id',id)
+}
+
+module.exports = {postdata,insert_data,get_data,data,updata,all_data_get,post_user}

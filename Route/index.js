@@ -72,4 +72,49 @@ app.put('/putApi/:id',(req,res)=>{
     })
 });
 
+app.get("/getApi/:id",(req,res)=>{
+    let id = req.params.id
+    var data = appdb.all_data_get(id)
+    data.then((res_data)=>{
+        var agentData = res_data[0]["agent"]
+        var agentApproveData = res_data[0]["agentApprove"] 
+        var adminData = res_data[0]["admin"]
+        var adminApproveData = res_data[0]["adminApprove"]
+        var customerName = res_data[0]["customer"]
+        if (agentData == "Sona Sharma"){
+            if(agentApproveData == "agent_yes"){  
+                if (adminData == "Kasish Sharma"){
+                    if(adminApproveData == "admin_yes"){
+                       var customer =  customerName
+                        var data = {
+                            New_user : req.body.New_user,
+                            Approved : customer
+                        }
+                    }
+                    else if(adminApproveData == "admin_no"){
+                        var customer =  customerName
+                        var data = {
+                            New_user : req.body.New_user,
+                            Rejected : customer
+                        }
+                    }
+                }
+            }
+            else if(agentApproveData == "agent_no"){  
+                var customer =  customerName
+                var data = {
+                    New_user : req.body.New_user,
+                    Rejected : customer
+                }
+            }
+        }
+        appdb.post_user(id,data)
+        .then(() => {
+            res.send("insert")
+        }).catch((err) => {
+            res.send(err)
+        })
+    })
+});
+
 module.exports = app;

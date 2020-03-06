@@ -38,3 +38,18 @@ knex_data.schema.createTable('Approval_tbl', (table) => {
     }).catch((err)=>{
         console.log(err)
     })
+
+// 4th tbl for loan with interest
+
+knex_data.schema.createTable('loan_with_ints', (table) => {
+    table.increments("id")
+    table.integer("Month");
+    table.integer("Interest");
+    table.integer("Discount")
+    table.integer("Total_cost")
+    table.integer("Total_amount")
+    }).then(()=>{
+        console.log("tbl created")
+    }).catch((err)=>{
+        console.log(err)
+    })

@@ -50,7 +50,9 @@ let post_loan_data = (post_data,id) => {
 let get_loan_data = (name_search) => {
     return knex("*").from("loan_tbl").where('id', 'like', '%' +name_search+ '%')
 }
-
+let get_all = () => {
+    return knex.select("*").from("loan_tbl")
+}
 module.exports = {get_data,data,updata,all_data_get,post_user,
     getdata,eml_data,pass_data,get_all_data,edit_data,post_loan_data,
-    get_id_data1,get_loan_data}
+    get_id_data1,get_loan_data,get_all}

@@ -203,4 +203,12 @@ app.get('/get/:id',(req,res) => {
     })
 });
 
+app.get('/getAllApi',(req,res) => {
+    appdb.get_all()
+    .then((Response) => {
+        res.send(Response)
+    }).catch((err) => {
+        res.send(err)
+    })
+});
 module.exports = app;

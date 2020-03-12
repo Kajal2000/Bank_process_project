@@ -41,13 +41,16 @@ knex_data.schema.createTable('Approval_tbl', (table) => {
 
 // 4th tbl for loan with interest
 
-knex_data.schema.createTable('loan_with_ints', (table) => {
+knex_data.schema.createTable('loan_tbl', (table) => {
     table.increments("id")
-    table.integer("Month");
-    table.integer("Interest");
-    table.integer("Discount")
-    table.integer("Total_cost")
-    table.integer("Total_amount")
+    table.integer("user_id").unsigned()
+    table.foreign("user_id").references("Approval_tbl.user_id")
+    table.string("Month");
+    table.string("Interest");
+    table.string("Discount")
+    table.string("Total_cost")
+    table.string("Total_amount")
+    table.string("Approved")
     }).then(()=>{
         console.log("tbl created")
     }).catch((err)=>{

@@ -39,5 +39,11 @@ let edit_data = (update_data,id) => {
     return knex("Admin_tbl").update(update_data).where("id",id)
 }
 
+let get_id_data1 = (user_id) => {
+    return knex("*").from("Approval_tbl").where("user_id",user_id)
+}
+let post_loan_data = (post_data,id) => {
+    return knex("loan_tbl").insert(post_data).where("id",id)
+}
 module.exports = {get_data,data,updata,all_data_get,post_user,
-    getdata,eml_data,pass_data,get_all_data,edit_data}
+    getdata,eml_data,pass_data,get_all_data,edit_data,post_loan_data,get_id_data1}

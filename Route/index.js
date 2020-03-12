@@ -170,4 +170,26 @@ app.get('/getdata/:id',(req,res) => {
     })
 });
 
+app.get("/GetApiData/:user_id",(req,res)=>{
+    var user_id = req.params.user_id
+    appdb.get_id_data1(user_id)
+    .then((data)=>{
+    Approved = data[0]["Approved"]
+    let post_data = {
+        user_id : req.body.user_id,
+        Month : req.body.Month,
+        Interest : req.body.Interest,
+        Discount : req.body.Discount,
+        Total_cost : req.body.Total_cost,
+        Total_amount : req.body.Total_amount,
+        Approved : Approved
+    }
+    appdb.post_loan_data(post_data)
+    .then((res_data)=>{
+        res.send(res_data)
+    }).catch((err)=>{
+        console.log(err)
+    })
+    })
+})
 module.exports = app;

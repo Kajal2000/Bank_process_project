@@ -3,6 +3,20 @@ const app = express.Router();
 const appdb  = require("../Model/indesxDB")
 var jwt = require("jsonwebtoken")
 
+app.post("/ApisinUp",(req,res)=>{
+    post = {
+        Email_Id : req.body.Email_Id,
+        Name : req.body.Name,
+        Password : req.body.Password
+    }
+    appdb.post_data1(post)
+    .then((resp_data)=>{
+        res.send(resp_data)
+    }).catch((err)=>{
+        console.log(err)
+    })
+});
+
 app.put('/update/:Id', function (req, res) {
     var Id = req.params.Id
     data_update = {

@@ -1,9 +1,12 @@
 let knex = require('../connection.js') 
 
+let post_data1 = ()=>{
+    return knex("singUp_tbl").insert(post)
+}
+
 let getdata = () => {
     return knex.select("*").from("singUp_tbl")
 }
-
 
 let get_data = () => {
     return knex.select("*").from("Admin_tbl")
@@ -53,6 +56,6 @@ let get_loan_data = (name_search) => {
 let get_all = () => {
     return knex.select("*").from("loan_tbl")
 }
-module.exports = {get_data,data,updata,all_data_get,post_user,
+module.exports = {post_data1,get_data,data,updata,all_data_get,post_user,
     getdata,eml_data,pass_data,get_all_data,edit_data,post_loan_data,
     get_id_data1,get_loan_data,get_all}

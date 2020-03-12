@@ -192,4 +192,15 @@ app.get("/GetApiData/:user_id",(req,res)=>{
     })
     })
 })
+
+app.get('/get/:id',(req,res) => {
+    var id = req.params.id
+    appdb.get_loan_data(id)
+    .then((Response) => {
+        res.send(Response)
+    }).catch((err) => {
+        res.send(err)
+    })
+});
+
 module.exports = app;

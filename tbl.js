@@ -1,7 +1,7 @@
 var knex_data = require("./connection")
 
 // first tbl
-knex_data.schema.createTable('Users_tbl', (table) => {
+knex_data.schema.createTable('singUp_tbl', (table) => {
     table.increments("Id")
     table.string("Email_Id");
     table.string("Name");

@@ -1,25 +1,47 @@
 const express = require('express');
 const app = express.Router();
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
 const appdb  = require("../Model/indesxDB")
+var jwt = require("jsonwebtoken")
 
-app.post('/create', function (req, res) {
-    bcrypt.hash(req.body.Password, saltRounds, function (err, hash) {
-    let data = {
-        Email_Id: req.body.Email_Id,
+app.put('/update/:Id', function (req, res) {
+    var Id = req.params.Id
+    data_update = {
+        Email_Id : req.body.Email_Id,
         Name : req.body.Name,
-        Password : hash
+        Password : req.body.Password
     }
-    appdb.postdata(data)
-    .then((res_data)=>{
-        res.send(res_data)
+    appdb.put_data(data_update,Id)
+    .then((resp_data)=>{
+        res.send(resp_data)
     }).catch((err)=>{
         console.log(err)
     })
-    })
 });
 
+app.post("/login",(req,res) => {
+    var Password = req.body.Password;
+    var Email_Id = req.body.Email_Id;
+    appdb.eml_data(Email_Id)
+    .then((logindata) => {
+        // console.log(logindata)
+        if (logindata.length == 0){
+            res.send("wrong h email")
+        }else{appdb.pass_data(Password)
+            .then((logindata) =>{
+            if (logindata.length == 0){
+                res.send("Wrong h password")
+            }else{
+                let newToken = jwt.sign({ "appdb" : logindata }, "kajal")
+                    // console.log(newToken)
+                    res.cookie(newToken)
+                    res.send('loing successsful')
+                }
+            })
+        }
+    }).catch((err)=>{
+        console.log(err); 
+    })
+});
 app.post('/postApi',(req,res)=>{
     let data1 = {
         customer : req.body.customer,
@@ -48,10 +70,14 @@ app.get("/getApi",(req,res)=>{
 app.get("/customerApi",(req,res)=>{
     appdb.data()
     .then((res_data)=>{
+        var list = []
         for(var i = 0; i<res_data.length; i++){
-        var s_data = res_data[i]["customer"]
-        // console.log(s_data)
+            var s_data = res_data[i]["customer"]
+            list.push(s_data)
         }
+        res.send({list})
+    }).catch((err)=>{
+        console.log(err)
     })
 })
 
@@ -114,6 +140,33 @@ app.get("/getApi/:id",(req,res)=>{
         }).catch((err) => {
             res.send(err)
         })
+    })
+});
+
+app.get('/getdata/:id',(req,res) => {
+    var id = req.params.id
+    appdb.get_all_data(id)
+    .then((Response) => {
+        customer = Response[0]["customer"]
+        admin = Response[0]["admin"]
+        adminApprove = Response[0]["adminApprove"]
+        agent = Response[0]["agent"]
+        agentApprove = Response[0]["agentApprove"]
+        if(agentApprove == "agent_no"){            
+            var update_data = {
+                customer : customer,
+                admin : admin,
+                adminApprove : adminApprove,
+                agent : agent,
+                agentApprove : req.body.agentApprove
+            }
+            appdb.edit_data(update_data,id)
+            .then((resp_data)=>{
+                console.log(resp_data)
+            }).catch((err)=>{
+                console.log(err)
+            })
+       }
     })
 });
 

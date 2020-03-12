@@ -1,18 +1,23 @@
 let knex = require('../connection.js') 
 
-let postdata = (data) => {
-    return knex("Users_tbl").insert(data)
+let getdata = () => {
+    return knex.select("*").from("singUp_tbl")
 }
 
-let insert_data = (data) => {
-    return knex("Admin_tbl").insert(data)
-}
 
 let get_data = () => {
     return knex.select("*").from("Admin_tbl")
 }
 let data = () => {
     return knex.select("*").from("Admin_tbl")
+}
+
+let eml_data = (Email_Id) => {
+    return knex.select("*").from("singUp_tbl").havingIn("Email_Id",Email_Id)
+}
+
+let pass_data = (Password) => {
+    return knex.select("*").from("singUp_tbl").havingIn("Password",Password)
 }
 
 let updata = (id,data) => {
@@ -26,4 +31,13 @@ let post_user = (id,data) => {
     return knex("Approval_tbl").insert(data).where('id',id)
 }
 
-module.exports = {postdata,insert_data,get_data,data,updata,all_data_get,post_user}
+let get_all_data = (id) => {
+    return knex.select("*").from("Admin_tbl").where("id",id)
+}
+
+let edit_data = (update_data,id) => {
+    return knex("Admin_tbl").update(update_data).where("id",id)
+}
+
+module.exports = {get_data,data,updata,all_data_get,post_user,
+    getdata,eml_data,pass_data,get_all_data,edit_data}

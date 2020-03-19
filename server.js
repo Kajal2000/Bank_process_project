@@ -10,3 +10,4 @@ app.use("/api",data)
 app.listen(8000,()=>{
     console.log("server is listening..............)")
 });
+

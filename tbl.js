@@ -56,3 +56,16 @@ knex_data.schema.createTable('loan_tbl', (table) => {
     }).catch((err)=>{
         console.log(err)
     })
+
+// 5 tbl cheaking password into the hashing
+
+knex_data.schema.createTable('sinUp', (table) => {
+    table.increments("user_id")
+    table.string("Name")
+    table.string("Email");
+    table.string("Password");
+    }).then(()=>{
+        console.log("tbl created")
+    }).catch((err)=>{
+        console.log(err)
+    })

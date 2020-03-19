@@ -2,8 +2,61 @@ const express = require('express');
 const app = express.Router();
 const appdb  = require("../Model/indesxDB")
 var jwt = require("jsonwebtoken")
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
 
-app.post("/ApisinUp",(req,res)=>{
+// 1
+app.post('/user', function (req, res) {
+    bcrypt.hash(req.body.Password, saltRounds, function (err,   hash) {
+    var create = ({
+        Name : req.body.Name,
+        Email: req.body.Email,
+        Password: hash
+    })
+    appdb.post1(create)
+    .then((data)=>{
+        res.send(data)
+        console.log("inserted")
+    }).catch((err)=>{
+        console.log(err)
+    })
+    })
+}); 
+
+// 2
+app.post("/loginApi",(req,res) => {
+    var Password = req.body.Password;
+    var Email_Id = req.body.Email_Id;
+    appdb.eml_data(Email_Id)
+    .then((logindata) => {
+        if (logindata.length == 0){
+            res.send("wrong h email")
+        }else{appdb.pass_data(Password).then((logindata) =>{
+            if (logindata.length == 0){
+                res.send("Wrong h password")
+            }else{
+                bcrypt.hash(Password, saltRounds, function(err, hash) {
+                    // console.log(hash)
+                    bcrypt.compare(Password, hash, function(err, result) {
+                        if (result){
+                            console.log('match')
+                            res.send('match')
+                        }else{
+                            console.log('no match')
+                            res.send('no match')
+                        }
+                    });
+                });
+            }
+        })
+    }
+    }).catch((err)=>{
+        console.log(err); 
+    })
+});
+
+// 3
+app.post("/Apis",(req,res)=>{
     post = {
         Email_Id : req.body.Email_Id,
         Name : req.body.Name,
@@ -17,6 +70,7 @@ app.post("/ApisinUp",(req,res)=>{
     })
 });
 
+// 4
 app.put('/update/:Id', function (req, res) {
     var Id = req.params.Id
     data_update = {
@@ -32,15 +86,16 @@ app.put('/update/:Id', function (req, res) {
     })
 });
 
+// 5
 app.post("/login",(req,res) => {
     var Password = req.body.Password;
     var Email_Id = req.body.Email_Id;
-    appdb.eml_data(Email_Id)
+    appdb.eml_data1(Email_Id)
     .then((logindata) => {
         // console.log(logindata)
         if (logindata.length == 0){
             res.send("wrong h email")
-        }else{appdb.pass_data(Password)
+        }else{appdb.pass_data1(Password)
             .then((logindata) =>{
             if (logindata.length == 0){
                 res.send("Wrong h password")
@@ -56,6 +111,8 @@ app.post("/login",(req,res) => {
         console.log(err); 
     })
 });
+
+// 6
 app.post('/postApi',(req,res)=>{
     let data1 = {
         customer : req.body.customer,
@@ -72,6 +129,7 @@ app.post('/postApi',(req,res)=>{
     })
 })
 
+// 7
 app.get("/getApi",(req,res)=>{
     var data = appdb.get_data()
     data.then((res_data)=>{
@@ -81,6 +139,7 @@ app.get("/getApi",(req,res)=>{
     })
 })
 
+// 8
 app.get("/customerApi",(req,res)=>{
     appdb.data()
     .then((res_data)=>{
@@ -95,6 +154,7 @@ app.get("/customerApi",(req,res)=>{
     })
 })
 
+// 9
 app.put('/putApi/:id',(req,res)=>{
     var id = req.params.id
     var data = {
@@ -112,6 +172,7 @@ app.put('/putApi/:id',(req,res)=>{
     })
 });
 
+// 10
 app.get("/getApi/:id",(req,res)=>{
     let id = req.params.id
     var data = appdb.all_data_get(id)
@@ -157,6 +218,7 @@ app.get("/getApi/:id",(req,res)=>{
     })
 });
 
+// 11
 app.get('/getdata/:id',(req,res) => {
     var id = req.params.id
     appdb.get_all_data(id)
@@ -184,6 +246,7 @@ app.get('/getdata/:id',(req,res) => {
     })
 });
 
+// 12
 app.get("/GetApiData/:user_id",(req,res)=>{
     var user_id = req.params.user_id
     appdb.get_id_data1(user_id)
@@ -207,6 +270,7 @@ app.get("/GetApiData/:user_id",(req,res)=>{
     })
 })
 
+// 13
 app.get('/get/:id',(req,res) => {
     var id = req.params.id
     appdb.get_loan_data(id)
@@ -217,6 +281,7 @@ app.get('/get/:id',(req,res) => {
     })
 });
 
+// 14
 app.get('/getAllApi',(req,res) => {
     appdb.get_all()
     .then((Response) => {
@@ -225,4 +290,5 @@ app.get('/getAllApi',(req,res) => {
         res.send(err)
     })
 });
+
 module.exports = app;

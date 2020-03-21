@@ -42,8 +42,8 @@ app.post("/loginApi",(req,res) => {
                             console.log('match')
                             res.send('match')
                         }else{
-                            console.log('no match')
-                            res.send('no match')
+                            console.log('not match')
+                            res.send('not match')
                         }
                     });
                 });
